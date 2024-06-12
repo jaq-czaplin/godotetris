@@ -64,3 +64,6 @@ func get_random_blueprint_index() -> int :
 	
 func get_blueprint_by_index(index: int) -> PieceBlueprint :
 	return all[index]
+	
+func get_random_blueprint() -> PieceBlueprint :
+	return get_blueprint_by_index(get_random_blueprint_index())

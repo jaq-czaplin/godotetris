@@ -27,9 +27,11 @@ func _process(_delta):
 
 func add_left_movement(val: int):
 	ticks[0] += val
+	ticks[1] = 0
 	
 func add_right_movement(val: int):
 	ticks[1] += val
+	ticks[0] = 0
 	
 func add_down_movement(val: int):
 	ticks[2] += val
