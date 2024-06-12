@@ -45,3 +45,12 @@ func count_not_empty_tiles_in_range(layer: GridLayer, from: Vector2i, to: Vector
 
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
+
+func clear_piece_shape(piece_shape: Shape, pos: Vector2i):
+	clear_shape(GridLayer.Active, piece_shape, pos)
+
+func is_piece_shape_empty(piece_shape: Shape, pos: Vector2i) -> bool:
+	for v in piece_shape.cells: 
+		if not is_tile_empty(GridLayer.Locked, pos + v) or not is_tile_empty(GridLayer.Board, pos + v) :
+			return false
+	return true

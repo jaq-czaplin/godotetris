@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://hnhxkecsg5hn"]
+[gd_scene load_steps=8 format=3 uid="uid://hnhxkecsg5hn"]
 
 [ext_resource type="Script" path="res://scripts/Tetris.gd" id="1_k3dpy"]
+[ext_resource type="Script" path="res://scripts/MovementTimer.gd" id="2_8y2wp"]
 [ext_resource type="Texture2D" uid="uid://668wmy2t4pfo" path="res://assets/cells.png" id="2_36wq3"]
 [ext_resource type="Script" path="res://scripts/Grid.gd" id="3_mtcdl"]
 [ext_resource type="Script" path="res://scripts/UI.gd" id="4_3muce"]
@@ -49,3 +50,6 @@ script = ExtResource("3_mtcdl")
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("4_3muce")
+
+[node name="MovementTimer" type="Node" parent="."]
+script = ExtResource("2_8y2wp")
