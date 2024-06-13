@@ -2,29 +2,32 @@
 class_name Grid extends TileMap
 
 enum GridLayer {
-	Board, Locked, Shadow, Active, Preview
+	Background, Board, Locked, Shadow, Active, Preview
 }
 
 const TILESET_ID: int = 0;
 const COLS: int = 10
 const ROWS: int = 20
 const EMPTY_ATLAS_COORDS = Vector2i(-1, -1)
-const BOARD_ATLAC_CORDS = Vector2i(4, 1)
-const SHADOW_ATLAS_COORDS = Vector2i(1, 1)
+const BOARD_ATLAS_CORDS = Vector2i(7, 1)
+const SHADOW_ATLAS_COORDS = Vector2i(7, 0)
+const GRID_ATLAS_COORDS = Vector2i(6, 1)
 const BOARD_POS = Vector2i(0, 0)
 const NEXT_PIECE_BOARD_POS = Vector2i(13, 6)
 const NEXT_PIECE_BOARD_COLS = 5
 const NEXT_PIECE_BOARD_ROWS = 4
-const NEXT_PIECE_OFFSET = Vector2i(2,2)
+const NEXT_PIECE_OFFSET = Vector2i(2, 1)
 
 func _ready():
+	draw_background()
 	draw_board()
-	draw_next_piece_board();
+	#draw_next_piece_board();
 
 func _process(_delta):
 	if Engine.is_editor_hint():
+		draw_background()
 		draw_board()
-		draw_next_piece_board();
+		#draw_next_piece_board();
 
 func draw_tile(layer: GridLayer, coords: Vector2i, atlas_coords: Vector2i):
 	set_cell(layer, coords, TILESET_ID, atlas_coords)
@@ -58,20 +61,27 @@ func count_not_empty_tiles_in_range(layer: GridLayer, from: Vector2i, to: Vector
 	return not_empty_tiles;
 
 func draw_board():
+	clear_layer(GridLayer.Board)
 	for col in range(BOARD_POS.x, BOARD_POS.x + COLS + 2):
-		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y), BOARD_ATLAC_CORDS)
-		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y + ROWS + 1), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y), BOARD_ATLAS_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y + ROWS + 1), BOARD_ATLAS_CORDS)
 	for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
-		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
-		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x + COLS + 1, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x, BOARD_POS.y + row), BOARD_ATLAS_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x + COLS + 1, BOARD_POS.y + row), BOARD_ATLAS_CORDS)
+
+func draw_background():
+	clear_layer(GridLayer.Background)
+	for col in range(BOARD_POS.x + 1, BOARD_POS.x + COLS + 1):
+		for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
+			draw_tile(GridLayer.Background, Vector2(col, row), GRID_ATLAS_COORDS)
 		
-func draw_next_piece_board():
-	for col in range(NEXT_PIECE_BOARD_POS.x, NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 2):
-		draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y), BOARD_ATLAC_CORDS)
-		draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1), BOARD_ATLAC_CORDS)
-	for row in range(NEXT_PIECE_BOARD_POS.y + 1, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1):
-		draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x, row), BOARD_ATLAC_CORDS)
-		draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 1, row), BOARD_ATLAC_CORDS)
+#func draw_next_piece_board():
+	#for col in range(NEXT_PIECE_BOARD_POS.x, NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 2):
+		#draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y), BOARD_ATLAS_CORDS)
+		#draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1), BOARD_ATLAS_CORDS)
+	#for row in range(NEXT_PIECE_BOARD_POS.y + 1, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1):
+		#draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x, row), BOARD_ATLAS_CORDS)
+		#draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 1, row), BOARD_ATLAS_CORDS)
 
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)

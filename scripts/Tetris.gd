@@ -28,7 +28,8 @@ func new_game():
 	score = 0;
 	movement_timer.reset()
 	movement_timer.active = true;
-	ui.hide_game_over();
+	ui.hide_game_over()
+	ui.show_next_piece_label()
 	clear_board()
 	spawn_next_piece()
 
@@ -64,7 +65,8 @@ func calculate_shadow_position() -> Vector2i :
 func clear_full_rows():
 	var cleared_rows =  grid.clear_full_rows()
 	score += cleared_rows * REWARD
-	movement_timer.speed_up()
+	if cleared_rows > 0: 
+		movement_timer.speed_up()
 
 func spawn_next_piece():
 	# if current_piece : current_piece = null
@@ -79,6 +81,7 @@ func spawn_next_piece():
 	
 	if is_game_over() :
 		movement_timer.active = false;
+		ui.hide_next_piece_label()
 		ui.show_game_over()
 	else :
 		draw_next_piece()

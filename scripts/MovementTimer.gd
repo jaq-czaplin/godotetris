@@ -25,15 +25,15 @@ func _process(_delta):
 				move_direction.emit(DIRECTIONS[i])
 				ticks[i] = 0
 
-func add_left_movement(val: int):
+func add_left_movement(val: float):
 	ticks[0] += val
 	ticks[1] = 0
 	
-func add_right_movement(val: int):
+func add_right_movement(val: float):
 	ticks[1] += val
 	ticks[0] = 0
 	
-func add_down_movement(val: int):
+func add_down_movement(val: float):
 	ticks[2] += val
 
 func clear_movment():
