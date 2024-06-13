@@ -23,6 +23,7 @@ Blueprints="*res://scripts/Blueprints.gd"
 
 window/size/viewport_width=650
 window/size/viewport_height=704
+window/stretch/mode="canvas_items"
 
 [editor]
 

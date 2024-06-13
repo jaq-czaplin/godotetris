@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://hnhxkecsg5hn"]
+[gd_scene load_steps=9 format=3 uid="uid://hnhxkecsg5hn"]
 
 [ext_resource type="Script" path="res://scripts/Tetris.gd" id="1_k3dpy"]
 [ext_resource type="Script" path="res://scripts/MovementTimer.gd" id="2_8y2wp"]
 [ext_resource type="Texture2D" uid="uid://668wmy2t4pfo" path="res://assets/cells.png" id="2_36wq3"]
 [ext_resource type="Script" path="res://scripts/Grid.gd" id="3_mtcdl"]
 [ext_resource type="Script" path="res://scripts/UI.gd" id="4_3muce"]
+[ext_resource type="FontFile" uid="uid://b35pudaqdsl5j" path="res://assets/press-start-2p-font/PressStart2P-vaV7.ttf" id="5_mt25t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4bcx2"]
 texture = ExtResource("2_36wq3")
@@ -37,7 +38,7 @@ script = ExtResource("1_k3dpy")
 tile_set = SubResource("TileSet_yj4t5")
 format = 2
 layer_0/name = "Board"
-layer_0/tile_data = PackedInt32Array(0, 0, 1, 65536, 0, 1, 131072, 0, 1, 196608, 0, 1, 262144, 0, 1, 327680, 0, 1, 393216, 0, 1, 458752, 0, 1, 524288, 0, 1, 589824, 0, 1, 655360, 0, 1, 720896, 0, 1, 786432, 0, 1, 851968, 0, 1, 917504, 0, 1, 983040, 0, 1, 1048576, 0, 1, 1114112, 0, 1, 1179648, 0, 1, 1245184, 0, 1, 1310720, 0, 1, 1376256, 0, 1, 1, 0, 1, 1376257, 0, 1, 2, 0, 1, 1376258, 0, 1, 3, 0, 1, 1376259, 0, 1, 4, 0, 1, 1376260, 0, 1, 5, 0, 1, 1376261, 0, 1, 6, 0, 1, 1376262, 0, 1, 7, 0, 1, 1376263, 0, 1, 8, 0, 1, 1376264, 0, 1, 9, 0, 1, 1376265, 0, 1, 10, 0, 1, 1376266, 0, 1, 11, 0, 1, 65547, 0, 1, 131083, 0, 1, 196619, 0, 1, 262155, 0, 1, 327691, 0, 1, 393227, 0, 1, 458763, 0, 1, 524299, 0, 1, 589835, 0, 1, 655371, 0, 1, 720907, 0, 1, 786443, 0, 1, 851979, 0, 1, 917515, 0, 1, 983051, 0, 1, 1048587, 0, 1, 1114123, 0, 1, 1179659, 0, 1, 1245195, 0, 1, 1310731, 0, 1, 1376267, 0, 1)
+layer_0/tile_data = PackedInt32Array(0, 262144, 1, 1376256, 262144, 1, 1, 262144, 1, 1376257, 262144, 1, 2, 262144, 1, 1376258, 262144, 1, 3, 262144, 1, 1376259, 262144, 1, 4, 262144, 1, 1376260, 262144, 1, 5, 262144, 1, 1376261, 262144, 1, 6, 262144, 1, 1376262, 262144, 1, 7, 262144, 1, 1376263, 262144, 1, 8, 262144, 1, 1376264, 262144, 1, 9, 262144, 1, 1376265, 262144, 1, 10, 262144, 1, 1376266, 262144, 1, 11, 262144, 1, 1376267, 262144, 1, 65536, 262144, 1, 65547, 262144, 1, 131072, 262144, 1, 131083, 262144, 1, 196608, 262144, 1, 196619, 262144, 1, 262144, 262144, 1, 262155, 262144, 1, 327680, 262144, 1, 327691, 262144, 1, 393216, 262144, 1, 393227, 262144, 1, 458752, 262144, 1, 458763, 262144, 1, 524288, 262144, 1, 524299, 262144, 1, 589824, 262144, 1, 589835, 262144, 1, 655360, 262144, 1, 655371, 262144, 1, 720896, 262144, 1, 720907, 262144, 1, 786432, 262144, 1, 786443, 262144, 1, 851968, 262144, 1, 851979, 262144, 1, 917504, 262144, 1, 917515, 262144, 1, 983040, 262144, 1, 983051, 262144, 1, 1048576, 262144, 1, 1048587, 262144, 1, 1114112, 262144, 1, 1114123, 262144, 1, 1179648, 262144, 1, 1179659, 262144, 1, 1245184, 262144, 1, 1245195, 262144, 1, 1310720, 262144, 1, 1310731, 262144, 1, 393229, 262144, 1, 720909, 262144, 1, 393230, 262144, 1, 720910, 262144, 1, 393231, 262144, 1, 720911, 262144, 1, 393232, 262144, 1, 720912, 262144, 1, 393233, 262144, 1, 720913, 262144, 1, 393234, 262144, 1, 720914, 262144, 1, 393235, 262144, 1, 720915, 262144, 1, 458765, 262144, 1, 458771, 262144, 1, 524301, 262144, 1, 524307, 262144, 1, 589837, 262144, 1, 589843, 262144, 1, 655373, 262144, 1, 655379, 262144, 1)
 layer_1/name = "Locked"
 layer_1/tile_data = PackedInt32Array()
 layer_2/name = "Shadow"
@@ -50,6 +51,38 @@ script = ExtResource("3_mtcdl")
 
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("4_3muce")
+
+[node name="NextPieceLabel" type="Label" parent="UI"]
+offset_left = 436.0
+offset_top = 156.0
+offset_right = 626.0
+offset_bottom = 179.0
+theme_override_fonts/font = ExtResource("5_mt25t")
+theme_override_font_sizes/font_size = 19
+text = "NEXT PIECE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+offset_left = 436.0
+offset_top = 17.0
+offset_right = 626.0
+offset_bottom = 40.0
+theme_override_fonts/font = ExtResource("5_mt25t")
+theme_override_font_sizes/font_size = 19
+text = "SCORE"
+vertical_alignment = 1
+
+[node name="Score" type="Label" parent="UI"]
+offset_left = 436.0
+offset_top = 45.0
+offset_right = 626.0
+offset_bottom = 68.0
+theme_override_fonts/font = ExtResource("5_mt25t")
+theme_override_font_sizes/font_size = 19
+text = "0"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="MovementTimer" type="Node" parent="."]
 script = ExtResource("2_8y2wp")

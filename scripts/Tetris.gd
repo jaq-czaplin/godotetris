@@ -9,7 +9,8 @@ var current_blueprint: PieceBlueprint
 var current_piece: Piece
 var next_blueprint: PieceBlueprint
 var shadow_pos: Vector2i
-#var next_piece: Piece
+var score = 0
+const REWARD = 100
 
 func _ready():
 	movement_timer.move_direction.connect(move_current_piece)
@@ -17,10 +18,13 @@ func _ready():
 
 func _process(_delta):
 	handle_user_input()
+	ui.set_score(score)
 
 
 
 func new_game():
+	score = 0;
+	movement_timer.reset()
 	clear_board()
 	spawn_next_piece()
 
@@ -40,6 +44,12 @@ func lock_current_piece():
 	
 	clear_full_rows()
 
+func draw_next_piece():
+	grid.draw_next_piece_preview(next_blueprint.shapes[0], next_blueprint.atlas_coords)
+
+func clear_next_piece():
+	grid.clear_next_piece_preview(next_blueprint.shapes[0])
+
 func calculate_shadow_position() -> Vector2i :
 	# TODO: Limit?
 	var temp_shadow_pos = current_piece.position
@@ -49,10 +59,14 @@ func calculate_shadow_position() -> Vector2i :
 
 func clear_full_rows():
 	var cleared_rows =  grid.clear_full_rows()
+	score += cleared_rows * REWARD
+	movement_timer.speed_up()
 
 func spawn_next_piece():
 	# if current_piece : current_piece = null
-	if next_blueprint : current_blueprint = next_blueprint
+	if next_blueprint : 
+		clear_next_piece()
+		current_blueprint = next_blueprint
 	else : current_blueprint = Blueprints.get_random_blueprint() as PieceBlueprint
 	
 	next_blueprint = Blueprints.get_random_blueprint() as PieceBlueprint
@@ -62,6 +76,7 @@ func spawn_next_piece():
 	if is_game_over() :
 		new_game()
 	else :
+		draw_next_piece()
 		draw_current_piece()
 
 func move_current_piece(direction: Vector2i):

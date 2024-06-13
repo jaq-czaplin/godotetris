@@ -1,3 +1,4 @@
+@tool
 class_name Grid extends TileMap
 
 enum GridLayer {
@@ -11,9 +12,19 @@ const EMPTY_ATLAS_COORDS = Vector2i(-1, -1)
 const BOARD_ATLAC_CORDS = Vector2i(4, 1)
 const SHADOW_ATLAS_COORDS = Vector2i(1, 1)
 const BOARD_POS = Vector2i(0, 0)
+const NEXT_PIECE_BOARD_POS = Vector2i(13, 6)
+const NEXT_PIECE_BOARD_COLS = 5
+const NEXT_PIECE_BOARD_ROWS = 4
+const NEXT_PIECE_OFFSET = Vector2i(2,2)
 
 func _ready():
 	draw_board()
+	draw_next_piece_board();
+
+func _process(_delta):
+	if Engine.is_editor_hint():
+		draw_board()
+		draw_next_piece_board();
 
 func draw_tile(layer: GridLayer, coords: Vector2i, atlas_coords: Vector2i):
 	set_cell(layer, coords, TILESET_ID, atlas_coords)
@@ -53,6 +64,14 @@ func draw_board():
 	for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
 		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
 		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x + COLS + 1, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
+		
+func draw_next_piece_board():
+	for col in range(NEXT_PIECE_BOARD_POS.x, NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 2):
+		draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1), BOARD_ATLAC_CORDS)
+	for row in range(NEXT_PIECE_BOARD_POS.y + 1, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1):
+		draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x, row), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 1, row), BOARD_ATLAC_CORDS)
 
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
@@ -65,7 +84,13 @@ func draw_shadow_shape(piece_shape: Shape, pos: Vector2i):
 
 func clear_shadow_shape(piece_shape: Shape, pos: Vector2i):
 	clear_shape(GridLayer.Shadow, piece_shape, pos)
+
+func draw_next_piece_preview(piece_shape: Shape, atlas_coords: Vector2i):
+	draw_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS + NEXT_PIECE_OFFSET, atlas_coords)
 	
+func clear_next_piece_preview(piece_shape: Shape):
+	clear_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS + NEXT_PIECE_OFFSET)
+
 func lock_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	for v in piece_shape.cells:
 		clear_tile(GridLayer.Active, v + pos)
