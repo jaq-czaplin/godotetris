@@ -17,7 +17,7 @@ func _ready():
 func _process(_delta):
 	if active :
 		# always fall down
-		add_down_movement(1)
+		add_down_movement(speed)
 		
 		# emit movement signal
 		for i in range(ticks.size()) :
