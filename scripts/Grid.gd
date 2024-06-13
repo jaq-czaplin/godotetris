@@ -8,10 +8,12 @@ const TILESET_ID: int = 0;
 const COLS: int = 10
 const ROWS: int = 20
 const EMPTY_ATLAS_COORDS = Vector2i(-1, -1)
+const BOARD_ATLAC_CORDS = Vector2i(4, 1)
 const SHADOW_ATLAS_COORDS = Vector2i(1, 1)
-const BOARD_POS = Vector2i(1,1)
+const BOARD_POS = Vector2i(0, 0)
 
-
+func _ready():
+	draw_board()
 
 func draw_tile(layer: GridLayer, coords: Vector2i, atlas_coords: Vector2i):
 	set_cell(layer, coords, TILESET_ID, atlas_coords)
@@ -44,6 +46,13 @@ func count_not_empty_tiles_in_range(layer: GridLayer, from: Vector2i, to: Vector
 				not_empty_tiles +=1
 	return not_empty_tiles;
 
+func draw_board():
+	for col in range(BOARD_POS.x, BOARD_POS.x + COLS + 2):
+		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(col, BOARD_POS.y + ROWS + 1), BOARD_ATLAC_CORDS)
+	for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
+		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
+		draw_tile(GridLayer.Board, Vector2i(BOARD_POS.x + COLS + 1, BOARD_POS.y + row), BOARD_ATLAC_CORDS)
 
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
@@ -74,7 +83,7 @@ func is_locked_position(pos: Vector2i):
 func count_full_tiles_in_row(row: int) -> int:
 	var count = 0
 	for col in range(COLS):
-		if is_locked_position(Vector2i(col + BOARD_POS.x, row)):
+		if is_locked_position(Vector2i(col + BOARD_POS.x + 1, row)):
 			count += 1
 	return count
 
@@ -83,17 +92,17 @@ func is_row_full(row: int):
 
 func shift_rows(from_row: int):
 	var atlas_coords: Vector2i
-	for row in range(from_row, BOARD_POS.y, -1):
+	for row in range(from_row, BOARD_POS.y + 1, -1):
 		for col in range(COLS):
-			atlas_coords = get_cell_atlas_coords(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row - 1))
+			atlas_coords = get_cell_atlas_coords(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row - 1))
 			if atlas_coords == EMPTY_ATLAS_COORDS:
-				clear_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row))
+				clear_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row))
 			else:
-				draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row), atlas_coords)
+				draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), atlas_coords)
 
 func clear_full_rows() -> int:
 	var cleared_rows = 0
-	var row : int = ROWS
+	var row : int = ROWS + BOARD_POS.y + 1
 	while row > 0 :
 		if is_row_full(row):
 			shift_rows(row)
