@@ -4,9 +4,12 @@ enum GridLayer {
 	Board, Locked, Shadow, Active, Preview
 }
 
+const TILESET_ID: int = 0;
+const COLS: int = 10
+const ROWS: int = 20
 const EMPTY_ATLAS_COORDS = Vector2i(-1, -1)
 const SHADOW_ATLAS_COORDS = Vector2i(1, 1)
-const TILESET_ID: int = 0;
+const BOARD_POS = Vector2i(1,1)
 
 
 
@@ -65,3 +68,45 @@ func is_piece_shape_empty(piece_shape: Shape, pos: Vector2i) -> bool:
 			return false
 	return true
 
+func is_locked_position(pos: Vector2i):
+	return not is_tile_empty(GridLayer.Locked, pos)
+
+func count_full_tiles_in_row(row: int) -> int:
+	var count = 0
+	for col in range(COLS):
+		if is_locked_position(Vector2i(col + BOARD_POS.x, row)):
+			count += 1
+	return count
+
+func is_row_full(row: int):
+	return count_full_tiles_in_row(row) == COLS
+
+func shift_rows(from_row: int):
+	var atlas_coords: Vector2i
+	for row in range(from_row, BOARD_POS.y, -1):
+		for col in range(COLS):
+			atlas_coords = get_cell_atlas_coords(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row - 1))
+			if atlas_coords == EMPTY_ATLAS_COORDS:
+				clear_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row))
+			else:
+				draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x, row), atlas_coords)
+
+func clear_full_rows() -> int:
+	var cleared_rows = 0
+	var row : int = ROWS
+	while row > 0 :
+		if is_row_full(row):
+			shift_rows(row)
+			cleared_rows += 1
+		else :
+			row -= 1
+	return cleared_rows
+
+func clear_all():
+	#for row in range(ROWS):
+		#for col in range(COLS):
+			#clear_tile(GridLayer.Board, Vector2i(col + BOARD_POS.x, row + BOARD_POS.y))
+	clear_layer(GridLayer.Active)
+	clear_layer(GridLayer.Shadow)
+	clear_layer(GridLayer.Locked)
+	clear_layer(GridLayer.Preview)

@@ -10,5 +10,11 @@ func _init(blueprint: PieceBlueprint, pos: Vector2i):
 	self.atlas_coords = blueprint.atlas_coords
 	self.position = pos
 
+func reset(blueprint: PieceBlueprint, pos: Vector2i):
+	self.shapes = blueprint.shapes
+	self.atlas_coords = blueprint.atlas_coords
+	self.position = pos
+
 func get_next_rotation():
 	return (self.rotation + 1) % self.shapes.size()
+	
