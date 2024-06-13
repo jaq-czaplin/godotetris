@@ -12,22 +12,20 @@ const EMPTY_ATLAS_COORDS = Vector2i(-1, -1)
 const BOARD_ATLAS_CORDS = Vector2i(7, 1)
 const SHADOW_ATLAS_COORDS = Vector2i(7, 0)
 const GRID_ATLAS_COORDS = Vector2i(6, 1)
+const FULL_ROW_ATLAS_COORDS = Vector2i(5, 1)
 const BOARD_POS = Vector2i(0, 0)
-const NEXT_PIECE_BOARD_POS = Vector2i(13, 6)
+const NEXT_PIECE_BOARD_POS = Vector2i(15, 7)
 const NEXT_PIECE_BOARD_COLS = 5
 const NEXT_PIECE_BOARD_ROWS = 4
-const NEXT_PIECE_OFFSET = Vector2i(2, 1)
 
 func _ready():
 	draw_background()
 	draw_board()
-	#draw_next_piece_board();
 
 func _process(_delta):
 	if Engine.is_editor_hint():
 		draw_background()
 		draw_board()
-		#draw_next_piece_board();
 
 func draw_tile(layer: GridLayer, coords: Vector2i, atlas_coords: Vector2i):
 	set_cell(layer, coords, TILESET_ID, atlas_coords)
@@ -75,14 +73,6 @@ func draw_background():
 		for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
 			draw_tile(GridLayer.Background, Vector2(col, row), GRID_ATLAS_COORDS)
 		
-#func draw_next_piece_board():
-	#for col in range(NEXT_PIECE_BOARD_POS.x, NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 2):
-		#draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y), BOARD_ATLAS_CORDS)
-		#draw_tile(GridLayer.Board, Vector2i(col, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1), BOARD_ATLAS_CORDS)
-	#for row in range(NEXT_PIECE_BOARD_POS.y + 1, NEXT_PIECE_BOARD_POS.y + NEXT_PIECE_BOARD_ROWS + 1):
-		#draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x, row), BOARD_ATLAS_CORDS)
-		#draw_tile(GridLayer.Board, Vector2i(NEXT_PIECE_BOARD_POS.x + NEXT_PIECE_BOARD_COLS + 1, row), BOARD_ATLAS_CORDS)
-
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
 
@@ -96,10 +86,10 @@ func clear_shadow_shape(piece_shape: Shape, pos: Vector2i):
 	clear_shape(GridLayer.Shadow, piece_shape, pos)
 
 func draw_next_piece_preview(piece_shape: Shape, atlas_coords: Vector2i):
-	draw_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS + NEXT_PIECE_OFFSET, atlas_coords)
+	draw_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS, atlas_coords)
 	
 func clear_next_piece_preview(piece_shape: Shape):
-	clear_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS + NEXT_PIECE_OFFSET)
+	clear_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS)
 
 func lock_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	for v in piece_shape.cells:
@@ -147,10 +137,25 @@ func clear_full_rows() -> int:
 	return cleared_rows
 
 func clear_all():
-	#for row in range(ROWS):
-		#for col in range(COLS):
-			#clear_tile(GridLayer.Board, Vector2i(col + BOARD_POS.x, row + BOARD_POS.y))
 	clear_layer(GridLayer.Active)
 	clear_layer(GridLayer.Shadow)
 	clear_layer(GridLayer.Locked)
 	clear_layer(GridLayer.Preview)
+
+
+
+# Alternative clearing full rows (not ready)
+func get_next_full_row() -> int:
+	var cleared_rows = 0
+	var row : int = ROWS + BOARD_POS.y + 1
+	while row > 0 :
+		if is_row_full(row):
+			mark_row_full(row)
+			return row
+		else :
+			row -= 1
+	return -1
+
+func mark_row_full(row):
+	for col in range(COLS):
+		draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), FULL_ROW_ATLAS_COORDS) 

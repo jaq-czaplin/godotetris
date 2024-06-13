@@ -9,6 +9,7 @@ var current_blueprint: PieceBlueprint
 var current_piece: Piece
 var next_blueprint: PieceBlueprint
 var shadow_pos: Vector2i
+var row_to_clear: int = -1
 var score = 0
 const REWARD = 100
 
@@ -18,13 +19,14 @@ func _ready():
 	new_game()
 
 func _process(_delta):
-	if(movement_timer.active):
+	if movement_timer.active :
 		handle_user_input()
 	ui.set_score(score)
 
 
 
 func new_game():
+	row_to_clear = -1
 	score = 0;
 	movement_timer.reset()
 	movement_timer.active = true;
@@ -46,7 +48,6 @@ func clear_current_piece():
 func lock_current_piece():
 	grid.clear_shadow_shape(current_piece.shapes[current_piece.rotation], shadow_pos)
 	grid.lock_piece_shape(current_piece.shapes[current_piece.rotation], current_piece.position, current_piece.atlas_coords)
-	
 	clear_full_rows()
 
 func draw_next_piece():
@@ -67,9 +68,9 @@ func clear_full_rows():
 	score += cleared_rows * REWARD
 	if cleared_rows > 0: 
 		movement_timer.speed_up()
+	#row_to_clear = grid.get_next_full_row()
 
 func spawn_next_piece():
-	# if current_piece : current_piece = null
 	if next_blueprint : 
 		clear_next_piece()
 		current_blueprint = next_blueprint
