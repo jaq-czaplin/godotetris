@@ -14,10 +14,12 @@ const REWARD = 100
 
 func _ready():
 	movement_timer.move_direction.connect(move_current_piece)
+	ui.new_game_request.connect(new_game)
 	new_game()
 
 func _process(_delta):
-	handle_user_input()
+	if(movement_timer.active):
+		handle_user_input()
 	ui.set_score(score)
 
 
@@ -25,6 +27,8 @@ func _process(_delta):
 func new_game():
 	score = 0;
 	movement_timer.reset()
+	movement_timer.active = true;
+	ui.hide_game_over();
 	clear_board()
 	spawn_next_piece()
 
@@ -74,7 +78,8 @@ func spawn_next_piece():
 	else : current_piece = Piece.new(current_blueprint, SPAWN_POS)
 	
 	if is_game_over() :
-		new_game()
+		movement_timer.active = false;
+		ui.show_game_over()
 	else :
 		draw_next_piece()
 		draw_current_piece()
