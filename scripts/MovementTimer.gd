@@ -8,6 +8,7 @@ const MAX_TICKS: int = 50
 var ticks: Array[float] = [0, 0, 0] # LEFT, RIGHT, DOWN
 var active: bool = true;
 var base_speed: float = 1.0
+var max_speed: float = 1.6
 var speed: float = base_speed
 var acceleration: float = 0.05
 
@@ -40,7 +41,7 @@ func clear_movment():
 	ticks = [0, 0, 0]
 
 func speed_up():
-	speed += acceleration
+	speed = max(speed + acceleration, max_speed)
 
 func clear_speed():
 	speed = base_speed

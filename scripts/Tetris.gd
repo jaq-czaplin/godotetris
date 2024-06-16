@@ -11,6 +11,7 @@ var next_blueprint: PieceBlueprint
 var shadow_pos: Vector2i
 var row_to_clear: int = -1
 var score = 0
+var bonus_root = 3
 const REWARD = 100
 
 func _ready():
@@ -65,7 +66,7 @@ func calculate_shadow_position() -> Vector2i :
 
 func clear_full_rows():
 	var cleared_rows =  await grid.clear_full_rows()
-	score += cleared_rows * REWARD
+	score += cleared_rows * REWARD + (pow(bonus_root, cleared_rows)-1)
 	if cleared_rows > 0: 
 		movement_timer.speed_up()
 
