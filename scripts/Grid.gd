@@ -1,6 +1,8 @@
 @tool
 class_name Grid extends TileMap
 
+const Explosion = preload("res://scenes/explosion.tscn")
+
 enum GridLayer {
 	Background, Board, Locked, Shadow, Active, Preview
 }
@@ -72,13 +74,13 @@ func draw_background():
 	for col in range(BOARD_POS.x + 1, BOARD_POS.x + COLS + 1):
 		for row in range(BOARD_POS.y + 1, BOARD_POS.y + ROWS + 1):
 			draw_tile(GridLayer.Background, Vector2(col, row), GRID_ATLAS_COORDS)
-		
+
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
 
 func clear_piece_shape(piece_shape: Shape, pos: Vector2i):
 	clear_shape(GridLayer.Active, piece_shape, pos)
-	
+
 func draw_shadow_shape(piece_shape: Shape, pos: Vector2i):
 	draw_shape(GridLayer.Shadow, piece_shape, pos, SHADOW_ATLAS_COORDS)
 
@@ -87,7 +89,7 @@ func clear_shadow_shape(piece_shape: Shape, pos: Vector2i):
 
 func draw_next_piece_preview(piece_shape: Shape, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS, atlas_coords)
-	
+
 func clear_next_piece_preview(piece_shape: Shape):
 	clear_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS)
 
@@ -115,6 +117,10 @@ func count_full_tiles_in_row(row: int) -> int:
 func is_row_full(row: int):
 	return count_full_tiles_in_row(row) == COLS
 
+func mark_row_full(row):
+	for col in range(COLS):
+		draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), FULL_ROW_ATLAS_COORDS) 
+
 func shift_rows(from_row: int):
 	var atlas_coords: Vector2i
 	for row in range(from_row, BOARD_POS.y + 1, -1):
@@ -125,12 +131,26 @@ func shift_rows(from_row: int):
 			else:
 				draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), atlas_coords)
 
+func explode_tile(pos: Vector2i):
+	var tile_center_pos = map_to_local(pos) # + Vector2(tile_set.tile_size) / 2
+	var explosion = Explosion.instantiate()
+	add_child(explosion)
+	explosion.position = tile_center_pos
+
+func explode_row(row: int):
+	for col in range(COLS):
+		explode_tile(Vector2i(col + BOARD_POS.x + 1, row)) 
+
 func clear_full_rows() -> int:
 	var cleared_rows = 0
 	var row : int = ROWS + BOARD_POS.y + 1
 	while row > 0 :
 		if is_row_full(row):
+			mark_row_full(row)
+			await get_tree().create_timer(0.2).timeout
+			explode_row(row)
 			shift_rows(row)
+			await get_tree().create_timer(0.2).timeout
 			cleared_rows += 1
 		else :
 			row -= 1
@@ -141,21 +161,3 @@ func clear_all():
 	clear_layer(GridLayer.Shadow)
 	clear_layer(GridLayer.Locked)
 	clear_layer(GridLayer.Preview)
-
-
-
-# Alternative clearing full rows (not ready)
-func get_next_full_row() -> int:
-	var cleared_rows = 0
-	var row : int = ROWS + BOARD_POS.y + 1
-	while row > 0 :
-		if is_row_full(row):
-			mark_row_full(row)
-			return row
-		else :
-			row -= 1
-	return -1
-
-func mark_row_full(row):
-	for col in range(COLS):
-		draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), FULL_ROW_ATLAS_COORDS) 

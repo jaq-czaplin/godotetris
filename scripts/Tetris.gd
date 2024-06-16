@@ -64,7 +64,7 @@ func calculate_shadow_position() -> Vector2i :
 	return temp_shadow_pos;
 
 func clear_full_rows():
-	var cleared_rows =  grid.clear_full_rows()
+	var cleared_rows =  await grid.clear_full_rows()
 	score += cleared_rows * REWARD
 	if cleared_rows > 0: 
 		movement_timer.speed_up()

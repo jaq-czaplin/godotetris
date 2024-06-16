@@ -9,7 +9,7 @@ var ticks: Array[float] = [0, 0, 0] # LEFT, RIGHT, DOWN
 var active: bool = true;
 var base_speed: float = 1.0
 var speed: float = base_speed
-var acceleration: float = 0.1
+var acceleration: float = 0.05
 
 func _ready():
 	reset()
