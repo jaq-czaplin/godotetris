@@ -1,5 +1,6 @@
 extends Node
 
+
 var all := [
 	
 	# Tetromino I
@@ -59,11 +60,19 @@ var all := [
 	], Vector2i(6, 0))
 ]
 
-func get_random_blueprint_index() -> int :
-	return randi_range(0, all.size() -1)
+var last_index : int = -1
+
+func get_random_blueprint_index() -> int :	
+	# reducing chance of geting same piece inspired by NES Tetris	
+	var random_index = randi_range(0, all.size())
+	if random_index == last_index or random_index == all.size():
+		random_index = randi_range(0, all.size() - 1)
+	last_index = random_index
+	return random_index
 	
 func get_blueprint_by_index(index: int) -> PieceBlueprint :
 	return all[index]
 	
 func get_random_blueprint() -> PieceBlueprint :
 	return get_blueprint_by_index(get_random_blueprint_index())
+
