@@ -163,7 +163,7 @@ func clear_full_rows() -> int:
 			await get_tree().create_timer(0.2).timeout
 			explode_row(row)
 			shift_rows(row)
-			await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(0.1).timeout
 			cleared_rows += 1
 		else :
 			row -= 1
