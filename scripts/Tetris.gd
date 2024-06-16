@@ -42,11 +42,11 @@ func draw_current_piece():
 	grid.draw_piece_shape(current_piece.shapes[current_piece.rotation], current_piece.position, current_piece.atlas_coords)
 
 func clear_current_piece():
-	grid.clear_shadow_shape(current_piece.shapes[current_piece.rotation], shadow_pos)
+	grid.clear_shadow_shape()
 	grid.clear_piece_shape(current_piece.shapes[current_piece.rotation], current_piece.position)
 
 func lock_current_piece():
-	grid.clear_shadow_shape(current_piece.shapes[current_piece.rotation], shadow_pos)
+	grid.clear_shadow_shape()
 	grid.lock_piece_shape(current_piece.shapes[current_piece.rotation], current_piece.position, current_piece.atlas_coords)
 	clear_full_rows()
 
@@ -68,7 +68,6 @@ func clear_full_rows():
 	score += cleared_rows * REWARD
 	if cleared_rows > 0: 
 		movement_timer.speed_up()
-	#row_to_clear = grid.get_next_full_row()
 
 func spawn_next_piece():
 	if next_blueprint : 

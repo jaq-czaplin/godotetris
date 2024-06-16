@@ -84,8 +84,8 @@ func clear_piece_shape(piece_shape: Shape, pos: Vector2i):
 func draw_shadow_shape(piece_shape: Shape, pos: Vector2i):
 	draw_shape(GridLayer.Shadow, piece_shape, pos, SHADOW_ATLAS_COORDS)
 
-func clear_shadow_shape(piece_shape: Shape, pos: Vector2i):
-	clear_shape(GridLayer.Shadow, piece_shape, pos)
+func clear_shadow_shape():
+	clear_layer(GridLayer.Shadow)
 
 func draw_next_piece_preview(piece_shape: Shape, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Preview, piece_shape, NEXT_PIECE_BOARD_POS, atlas_coords)
@@ -122,14 +122,27 @@ func mark_row_full(row):
 		draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), FULL_ROW_ATLAS_COORDS) 
 
 func shift_rows(from_row: int):
-	var atlas_coords: Vector2i
+	var current_pos: Vector2i
 	for row in range(from_row, BOARD_POS.y + 1, -1):
 		for col in range(COLS):
-			atlas_coords = get_cell_atlas_coords(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row - 1))
-			if atlas_coords == EMPTY_ATLAS_COORDS:
-				clear_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row))
-			else:
-				draw_tile(GridLayer.Locked, Vector2i(col + BOARD_POS.x + 1, row), atlas_coords)
+			current_pos =  Vector2i(col + BOARD_POS.x + 1, row)
+			shift_locked_tile(current_pos)
+			shift_shadow_tile(current_pos)
+
+func shift_locked_tile(pos: Vector2i):
+	var up_pos = pos + Vector2i.UP
+	var atlas_coords = get_cell_atlas_coords(GridLayer.Locked, up_pos)
+	if atlas_coords == EMPTY_ATLAS_COORDS:
+		clear_tile(GridLayer.Locked, pos)
+	else:
+		draw_tile(GridLayer.Locked, pos, atlas_coords)
+
+func shift_shadow_tile(pos: Vector2i):
+	var up_pos = pos + Vector2i.UP
+	if is_tile_empty(GridLayer.Shadow, up_pos):
+		clear_tile(GridLayer.Shadow, pos)
+	else:
+		draw_tile(GridLayer.Shadow, pos, SHADOW_ATLAS_COORDS)
 
 func explode_tile(pos: Vector2i):
 	var tile_center_pos = map_to_local(pos) # + Vector2(tile_set.tile_size) / 2
