@@ -13,6 +13,7 @@ var row_to_clear: int = -1
 var score = 0
 var bonus_root = 3
 const REWARD = 100
+var is_playing = false
 
 func _ready():
 	movement_timer.move_direction.connect(move_current_piece)
@@ -20,18 +21,20 @@ func _ready():
 	new_game()
 
 func _process(_delta):
-	if movement_timer.active :
+	if is_playing :
 		handle_user_input()
 	ui.set_score(score)
 
 
 
 func new_game():
+	is_playing = true
 	row_to_clear = -1
-	score = 0;
+	score = 0
 	movement_timer.reset()
-	movement_timer.active = true;
+	movement_timer.active = true
 	ui.hide_game_over()
+	ui.hide_pause()
 	ui.show_next_piece_label()
 	clear_board()
 	spawn_next_piece()
@@ -81,9 +84,12 @@ func spawn_next_piece():
 	else : current_piece = Piece.new(current_blueprint, SPAWN_POS)
 	
 	if is_game_over() :
-		movement_timer.active = false;
+		is_playing = false
+		movement_timer.active = false
 		ui.hide_next_piece_label()
 		ui.show_game_over()
+		ui.hide_pause()
+		ui.focus_new_game_button()
 	else :
 		draw_next_piece()
 		draw_current_piece()
@@ -119,14 +125,27 @@ func is_game_over() -> bool:
 func clear_board():
 	grid.clear_all()
 
+func toggle_pause():
+	movement_timer.active = !movement_timer.active
+	if movement_timer.active:
+		ui.hide_pause()
+	else :
+		ui.show_pause()
+
 func handle_user_input():
-	if Input.is_action_pressed("ui_left"):
-		movement_timer.add_left_movement(10)
-	elif Input.is_action_pressed("ui_right"):
-		movement_timer.add_right_movement(10)
-	elif Input.is_action_pressed("ui_down"):
-		movement_timer.add_down_movement(10)
-	elif Input.is_action_just_pressed("ui_up"):
-		rotate_current_piece()
-	elif Input.is_action_just_pressed("ui_accept"):
-		drop_current_piece()
+	if movement_timer.active :
+		if Input.is_action_pressed("left"):
+			movement_timer.add_left_movement(10)
+		elif Input.is_action_pressed("right"):
+			movement_timer.add_right_movement(10)
+		elif Input.is_action_pressed("down"):
+			movement_timer.add_down_movement(10)
+		elif Input.is_action_just_pressed("up"):
+			rotate_current_piece()
+		elif Input.is_action_just_pressed("drop"):
+			drop_current_piece()
+		elif Input.is_action_just_pressed("enter"):
+			toggle_pause()
+	else:
+		if Input.is_action_just_pressed("enter"):
+			toggle_pause()

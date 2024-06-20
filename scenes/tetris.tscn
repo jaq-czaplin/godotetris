@@ -81,6 +81,21 @@ OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PauseLabel" type="Label" parent="UI"]
+visible = false
+offset_left = 64.0
+offset_top = 234.0
+offset_right = 324.0
+offset_bottom = 341.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 6
+theme_override_constants/shadow_offset_y = 6
+theme_override_fonts/font = ExtResource("5_mt25t")
+theme_override_font_sizes/font_size = 37
+text = "PAUSE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ScoreLabel" type="Label" parent="UI"]
 offset_left = 418.0
 offset_top = 17.0
