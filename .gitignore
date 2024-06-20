@@ -1,4 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
 addons/
+build/
 export_presets.cfg

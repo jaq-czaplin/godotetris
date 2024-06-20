@@ -78,8 +78,8 @@ func draw_background():
 func draw_piece_shape(piece_shape: Shape, pos: Vector2i, atlas_coords: Vector2i):
 	draw_shape(GridLayer.Active, piece_shape, pos, atlas_coords)
 
-func clear_piece_shape(piece_shape: Shape, pos: Vector2i):
-	clear_shape(GridLayer.Active, piece_shape, pos)
+func clear_piece_shape():
+	clear_layer(GridLayer.Active)
 
 func draw_shadow_shape(piece_shape: Shape, pos: Vector2i):
 	draw_shape(GridLayer.Shadow, piece_shape, pos, SHADOW_ATLAS_COORDS)

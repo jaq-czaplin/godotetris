@@ -44,7 +44,7 @@ func draw_current_piece():
 
 func clear_current_piece():
 	grid.clear_shadow_shape()
-	grid.clear_piece_shape(current_piece.shapes[current_piece.rotation], current_piece.position)
+	grid.clear_piece_shape()
 
 func lock_current_piece():
 	grid.clear_shadow_shape()
